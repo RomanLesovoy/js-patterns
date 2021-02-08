@@ -34,6 +34,35 @@ function carWithSkin(carInstance, skin = 'dark') {
 const mercedes = new Car('mercedes');
 carWithSkin(mercedes);
 
+/* Class style */
+
+class AnySubject {
+    value = 1;
+    updateValue(newValue) {
+        this.value = newValue;
+    }
+}
+const subject = new AnySubject();
+function Notifiable (context) {
+    this.context = context;
+    this.context.subscribers = [];
+    this.context.subscribe = function (subscriber) {
+        this.subscribers.push(subscriber);
+    }
+    this.context.notify = function (value) {
+        this.subscribers.forEach((subscriber) => {
+            subscriber.callback(value);
+        })
+    }
+    this.context.notify = this.context.notify.bind(this.context);
+}
+const notifiableSubject = new Notifiable(subject);
+
+notifiableSubject.context.updateValue(2);
+notifiableSubject.context.subscribe({ callback: (v) => { console.log(v); }});
+notifiableSubject.context.notify(notifiableSubject.context.value);
+
+
 /* old style */
 
 function Ball(param) {
